@@ -7,13 +7,31 @@ package object Basics {
 
   def newIndex(): Index = Map.empty[String, Set[Int]]
 
-  def makeIndex(book: Book): Index = {
-    var index = newIndex()
-    for((page, i) <- book.view.zipWithIndex) {
-      for(word <- page) {
-        val pages = index(word)
-        index = index + (word -> (pages ++ Array(i)))
-      }
+  def makeIndex(book: Book, currentPageNumber: Int, index: Index): Index = {
+    if (!book.isEmpty){
+      val updatedIndex = updateIndex(index, book(0), currentPageNumber)
+      makeIndex(book.tail, currentPageNumber + 1, updatedIndex)
+    } else {
+      index
     }
   }
+
+  private[this] def updateIndex(index: Index, page: Page, currentPageNumber: Int): Index = {
+    if (!page.isEmpty){
+      val word = page(0)
+      if (index.contains(word)) {
+        val pageNumberSet = index(word)
+        val updatedPageSet = pageNumberSet + currentPageNumber
+        val updatedIndex = index + (word -> updatedPageSet)
+        updateIndex(updatedIndex, page.tail, currentPageNumber)
+      } else {
+        val updatedIndex = index + (word -> Set(currentPageNumber))
+        updateIndex(updatedIndex, page.tail, currentPageNumber)
+      }
+    } else {
+      index
+    }
+  }
+
+
 }
