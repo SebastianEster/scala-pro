@@ -1,4 +1,4 @@
-import Basics.{Book, Index}
+import Basics.{Book, Index, Page}
 import org.scalatest.FlatSpec
 
 class BasicsSpec extends FlatSpec {
@@ -9,8 +9,9 @@ class BasicsSpec extends FlatSpec {
   }
 
   "The function makeIndex" should "return a damn index" in {
-    val book: Book = Array(Array("hello", "from", "scala"), Array("hello", "from", "sebastian"), Array("hello", "you", "bastard"))
-    val index: Index = Basics.makeIndex(book, 1, Basics.newIndex())
+    val book: Book = Array(new Page(Array("hello", "from", "scala"), 1),
+      new Page(Array("hello", "from", "sebastian"), 2), new Page(Array("hello", "you", "fool"), 3))
+    val index: Index = Basics.makeIndex(book)
     assert(index("hello").size == 3)
   }
 
