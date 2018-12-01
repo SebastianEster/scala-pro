@@ -13,4 +13,9 @@ class WarmupSpec extends FlatSpec {
   "The function multiply" should "return the passed integer value multiplied by 3" in {
     assert(Warmup.multiply(5) == 15)
   }
+
+  "The function compose" should "take two functions and return a composition of those two" in {
+    val composed = Warmup.compose((x: Int) => x * x, (x: Int) => x + x)
+    assert(composed(5) == 100)
+  }
 }
